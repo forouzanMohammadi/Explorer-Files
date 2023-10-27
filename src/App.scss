@@ -1,18 +1,97 @@
-body{
+body {
   background-color: #151515;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.container{
+.container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-top: 40px;
 }
 
-.explorer-box{
+.explorer-box {
   width: 40%;
   height: 50px;
   border: 1px solid #8b8b8b;
   border-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+
+  .faChevronDown {
+    color: #dedede;
+    font-weight: bold !important;
+    cursor: pointer;
+  }
+
+  span {
+    color: #dedede;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .faFolder,
+  .faFile {
+    color: #afafaf;
+
+    &:hover {
+      color: #dfdfdf;
+      transform: scale(1.1);
+    }
+  }
 }
 
+.box {
+  width: 40%;
+  height: auto;
+  border: 1px solid #8b8b8b;
+  border-top: none;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 0 30px;
 
+  .file {
+    color: #e8e8e8;
+    margin-right: 5px;
+  }
+
+  input {
+    border-radius: 5px;
+    height: 23px;
+    outline: none;
+    padding: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+      sans-serif;
+    border: 1.5px solid #4b4c4c;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 2px, #fff 0px 0px 0px 1.5px;
+  }
+
+  .fileName {
+    color: #e8e8e8;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 1.1em;
+    cursor: pointer;
+    &:hover {
+      color: rgb(124, 160, 223);
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.icons{
+  color: #afafaf;
+
+  &:hover {
+    color: #dfdfdf;
+    transform: scale(1.1);
+  }
+}
