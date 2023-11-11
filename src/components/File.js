@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function File({ fileId, onFileComplete, onDelete }) {
+function File({ fileId, onItemComplete, onDelete }) {
  const [isFileClicked, setIsFileClicked] = useState(true);
  const [isEditing, setIsEditing] = useState(false);
  const [fileName, setFileName] = useState('New File');
@@ -12,7 +12,7 @@ function File({ fileId, onFileComplete, onDelete }) {
    if (tempFileNameRef.current !== undefined && tempFileNameRef.current.trim() !== "") {
      setIsFileClicked(false);
      setFileName(tempFileNameRef.current);
-     onFileComplete();
+     onItemComplete();
    }
    setIsEditing(false);
  };
@@ -32,14 +32,11 @@ function File({ fileId, onFileComplete, onDelete }) {
  };
 
  const handleEdit = () => {
-  //  if (!isEditing) {
-  //    tempFileNameRef.current = fileName; 
-  //  }
    setIsEditing(!isEditing);
  };
 
  return (
-   <div className='d-flex justify-content-between align-items-center my-2'>
+   <div className='d-flex justify-content-between align-items-center my-2 files-row'>
      <div className='d-flex align-items-center'>
        <FontAwesomeIcon icon={faFile} className="file" size="lg" />
        {isFileClicked || isEditing ? (
@@ -56,7 +53,7 @@ function File({ fileId, onFileComplete, onDelete }) {
          <span className='fileName'>{fileName}</span>
        )}
      </div>
-     <div>
+     <div className='files-editing'>
        <FontAwesomeIcon icon={faPen} className='icons mx-3' onClick={handleEdit} />
        <FontAwesomeIcon icon={faTrash} className='icons' onClick={handleDelete} />
      </div>
