@@ -109,13 +109,14 @@ body {
 .files-row:hover .files-editing {
   display: block;
 }
-// .folder-editing {
-//   display: none;
-// }
 
-// .folder-row:hover .folder-editing {
-//   display: block;
-// }
+.folder-editing {
+  display: none;
+}
+
+.folder-row:hover .folder-editing {
+  display: block;
+}
 
 .box .subFolder {
   margin-left: 40px;
@@ -123,4 +124,20 @@ body {
 
 .box .subFile {
   margin-left: 40px;
+}
+
+@media screen and (max-width: 800px) {
+  .explorer-box{
+    width: 100%;
+    height: 0;
+    border: none;
+    padding: 0;
+  }
+
+  .box{
+    width: 100%;
+    margin-top: 30px;
+    border: none;
+    padding: 0 5px;
+  }
 }

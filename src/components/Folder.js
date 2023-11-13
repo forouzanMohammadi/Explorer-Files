@@ -5,7 +5,7 @@ import {
   faPen,
   faTrash,
   faFile,
-  faFolderOpen
+  faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid'
 import File from './File'
@@ -16,31 +16,45 @@ function Folder({ folderId, onItemComplete, onDelete }) {
   const [folderName, setFolderName] = useState('New Folder')
   const tempFolderNameRef = useRef()
   const [subItems, setSubItems] = useState([])
-  const [isFolderOpen, setIsFolderOpen] = useState(false);
+  const [isFolderOpen, setIsFolderOpen] = useState(false)
+  const [isInputActive, setIsInputActive] = useState(false)
+
+  const handleFocus = () => {
+    setIsInputActive(true)
+    setIsFolderClicked(true)
+  }
 
   const handleBlur = () => {
     if (
+      isInputActive &&
+      isFolderClicked &&
       tempFolderNameRef.current !== undefined &&
       tempFolderNameRef.current.trim() !== ''
     ) {
-      setIsFolderClicked(false)
-      setFolderName(tempFolderNameRef.current)
-      onItemComplete()
+      setIsFolderClicked(false);
+      setFolderName(tempFolderNameRef.current);
+      onItemComplete();
     }
-    setIsEditing(false)
-  }
+    setIsEditing(false);
+    setIsInputActive(false);
+  };
 
   const handleChange = (event) => {
     tempFolderNameRef.current = event.target.value
   }
 
   const handleKeyPress = (event) => {
-    if (
-      event.key === 'Enter' &&
-      tempFolderNameRef.current !== undefined &&
-      tempFolderNameRef.current.trim() !== ''
-    ) {
-      handleBlur()
+    if (event.key === 'Enter') {
+      if (
+        isInputActive &&
+        isFolderClicked &&
+        tempFolderNameRef.current !== undefined &&
+        tempFolderNameRef.current.trim() !== ''
+      ) {
+        handleBlur()
+      } else {
+        setIsFolderOpen(false)
+      }
     }
   }
 
@@ -53,43 +67,50 @@ function Folder({ folderId, onItemComplete, onDelete }) {
   }
 
   const handleAddFile = () => {
-    setIsFolderOpen(true)
-    const newFile = {
-      type: 'file',
-      id: uuidv4(),
-      name: 'New File',
+    if (isInputActive || !isFolderClicked) {
+      setIsFolderOpen(true);
+      const newFile = {
+        type: 'file',
+        id: uuidv4(),
+        name: 'New File',
+      };
+      setSubItems([...subItems, newFile]);
     }
-    setSubItems([...subItems, newFile])
-  }
-
+  };
+  
   const handleAddFolder = () => {
-    setIsFolderOpen(true)
-    const newFolder = {
-      type: 'folder',
-      id: uuidv4(),
-      name: 'New Folder',
-      subItems: [],
+    if (isInputActive || !isFolderClicked) {
+      setIsFolderOpen(true);
+      const newFolder = {
+        type: 'folder',
+        id: uuidv4(),
+        name: 'New Folder',
+        subItems: [],
+      };
+      setSubItems([...subItems, newFolder]);
     }
-    setSubItems([...subItems, newFolder])
-  }
+  };
 
   const deleteChild = (childId) => {
     setSubItems((prevSubItems) =>
-      prevSubItems.filter((subItem) => subItem.id !== childId)
-    );
-    onItemComplete();
-  };
-  
-  const handleDeleteChild = (childId) => {
-    deleteChild(childId);
-    onItemComplete(); 
-  };
+      prevSubItems.filter((subItem) => subItem.id !== childId),
+    )
+    onItemComplete()
+  }
 
-  
+  const handleDeleteChild = (childId) => {
+    deleteChild(childId)
+    onItemComplete()
+  }
+
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center my-2 folder-row">
-        <div className="d-flex align-items-center">
+        <div
+          className={`d-flex align-items-center ${
+            isInputActive ? 'input-active' : ''
+          }`}
+        >
           <FontAwesomeIcon
             icon={isFolderOpen ? faFolderOpen : faFolder}
             className="folder"
@@ -103,6 +124,7 @@ function Folder({ folderId, onItemComplete, onDelete }) {
               onBlur={handleBlur}
               onChange={handleChange}
               onKeyPress={handleKeyPress}
+              onFocus={handleFocus}
               autoFocus
               placeholder="folder name..."
             />
@@ -133,9 +155,15 @@ function Folder({ folderId, onItemComplete, onDelete }) {
           />
         </div>
       </div>
-      <div >
+      <div>
         {subItems.length > 0 && (
-          <div className="sub-items" style={{ display: isFolderOpen ? "block" : "none", paddingLeft: 25 }}>
+          <div
+            className="sub-items"
+            style={{
+              display: isFolderOpen ? 'block' : 'none',
+              paddingLeft: 25,
+            }}
+          >
             {subItems.map((subItem) =>
               subItem.type === 'folder' ? (
                 <Folder
@@ -149,7 +177,7 @@ function Folder({ folderId, onItemComplete, onDelete }) {
                   key={subItem.id}
                   fileId={subItem.id}
                   onItemComplete={onItemComplete}
-                  onDelete={handleDeleteChild }
+                  onDelete={handleDeleteChild}
                 />
               ),
             )}

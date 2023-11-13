@@ -48,6 +48,8 @@ function Explorer() {
   const handleDeleteItem = (itemId) => {
     const updatedItems = items.filter((item) => item.id !== itemId);
     setItems(updatedItems);
+    setIsCreatingFile(false);
+  setIsCreatingFolder(false);
   };
 
   return (
